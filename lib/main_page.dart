@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sdl_v2/Models/device.dart';
+import 'package:sdl_v2/core/common/delete_dialog.dart';
 import 'package:sdl_v2/core/constants.dart';
 import 'package:sdl_v2/core/theme.dart';
 import 'package:sdl_v2/features/add%20device/add_device_page.dart';
 import 'package:sdl_v2/features/add%20sensor/add_sensor_page.dart';
+import 'package:sdl_v2/features/home/home_controller.dart';
 import 'package:sdl_v2/features/home/widgets/add_room_sheet.dart';
 
 import 'Models/room.dart';
@@ -74,7 +76,7 @@ class _MainPageState extends ConsumerState<MainPage> {
         final data = dbevent.snapshot.value as Map;
         List<Device> sensors = [];
         for (var e in data.values) {
-          if (e['isSensor'] as bool == true) {
+          if (e['isSensor'] as bool == true) {            
             sensors.add(Device.fromMap(e));
           }
         }
@@ -164,6 +166,22 @@ class _MainPageState extends ConsumerState<MainPage> {
                         horizontal: 20,
                       ),
                       child: InkWell(
+                        onLongPress: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => DeleteDialog(
+                              action: () {
+                                ref
+                                    .read(homeNotifierProvider.notifier)
+                                    .deleteRoom(
+                                      rooms[index].id,
+                                      context,
+                                    );
+                              },
+                              title: rooms[index].name,
+                            ),
+                          );
+                        },
                         onTap: () {
                           ref
                               .read(selectedRoomProvider.notifier)

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../theme.dart';
 
@@ -41,6 +39,7 @@ class CustomInput extends StatelessWidget {
                 if (v!.isEmpty) {
                   return "This field is required.";
                 }
+                return null;
               },
               controller: controller,
               decoration: InputDecoration(

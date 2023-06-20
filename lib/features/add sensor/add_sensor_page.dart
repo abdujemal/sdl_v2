@@ -211,9 +211,12 @@ class _AddSensorPageState extends ConsumerState<AddSensorPage> {
                                         scheduleStartTime: '',
                                         scheduleEndTime: '',
                                         trigerId: '',
+                                        triggerName: '',
                                         trigerAction: '',
                                         triggerDelay: 0,
                                         triggerValue: 0,
+                                        value1: 0,
+                                        value2: 0,
                                       ),                                     
                                       context,
                                     );

@@ -18,7 +18,8 @@ import '../../core/theme.dart';
 import '../../main_page.dart';
 
 class AddDevicePage extends ConsumerStatefulWidget {
-  const AddDevicePage({super.key});
+  final Device? device;
+  const AddDevicePage({this.device, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AddDevicePageState();
@@ -34,9 +35,42 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(seconds: 3)).then((value) {
-      ref.read(qrDataProvider.notifier).update((state) => "SS2354");
-    });
+    deviceNameTc = TextEditingController();
+    descriptionTc = TextEditingController();
+
+    deviceKey = GlobalKey<FormState>();
+
+
+      // Future.delayed(const Duration(seconds: 3)).then((value) {
+      //   ref.read(qrDataProvider.notifier).update((state) => "SS2354");
+      // });
+    if (widget.device != null) {
+      deviceNameTc.text = widget.device!.name;
+      descriptionTc.text = widget.device!.descrition;
+      Future.delayed(const Duration(seconds: 1)).then((value) {
+        ref
+            .read(qrDataProvider.notifier)
+            .update((state) => widget.device!.deviceId);
+
+        if (widget.device!.trigerId != '') {
+          ref.read(trigerProvider.notifier).update(
+                (state) => Trigger(
+                  action: widget.device!.trigerAction,
+                  id: widget.device!.id,
+                  name: widget.device!.triggerName,
+                  delay: widget.device!.triggerDelay.toDouble(),
+                  deviceId: widget.device!.deviceId,
+                  value: widget.device!.triggerValue.toDouble(),
+                ),
+              );
+        }
+      });
+    } else {
+      Future.delayed(const Duration(seconds: 1)).then((value) {
+        ref.read(qrDataProvider.notifier).update((state) => "SS2354");
+        ref.read(trigerProvider.notifier).update((state) => null);
+      });
+    }
   }
 
   @override
@@ -59,7 +93,7 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
           ),
           onPressed: () {},
         ),
-        title: const Text("New Device"),
+        title: Text(widget.device != null ? "Edit Device" : "New Device"),
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -84,7 +118,7 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
                       ),
                       CustomInput(
                         title: "Description",
-                        hint: "Corner Sensor",
+                        hint: "Corner Light",
                         controller: descriptionTc,
                       ),
                       Padding(
@@ -183,6 +217,24 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
                 const SizedBox(
                   height: 20,
                 ),
+                if (trigger != null && !trigger.isNull())
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        ref
+                            .read(trigerProvider.notifier)
+                            .update((state) => null);
+                      },
+                      child: const Text(
+                        "Remove trigger",
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 19,
+                        ),
+                      ),
+                    ),
+                  ),
                 trigger != null && !trigger.isNull()
                     ? TriggerDisplay(
                         onTap: () {
@@ -232,56 +284,115 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
                             final Trigger? trigger = ref.read(trigerProvider);
                             if (deviceKey.currentState!.validate()) {
                               if (deviceId != null) {
-                                if (trigger != null && !trigger.isNull()) {
-                                  ref
-                                      .read(addDeviceNotifierProvider.notifier)
-                                      .addDevice(
-                                        Device(
-                                          id: null,
-                                          name: deviceNameTc.text,
-                                          descrition: descriptionTc.text,
-                                          swittch: false,
-                                          isSensor: false,
-                                          deviceId: deviceId,
-                                          deviceType: DeviceType.getDeviceType(
-                                              deviceId)!,
-                                          auto: false,
-                                          schedule: false,
-                                          roomId: rooms[selectedIndex].id,
-                                          scheduleStartTime: '',
-                                          scheduleEndTime: '',
-                                          trigerId: trigger.id!,
-                                          trigerAction: trigger.action!,
-                                          triggerDelay: trigger.delay.toInt(),
-                                          triggerValue: trigger.value.toInt(),
-                                        ),
-                                        context,
-                                      );
-                                } else {
-                                  ref
-                                      .read(addDeviceNotifierProvider.notifier)
-                                      .addDevice(
-                                        Device(
-                                          id: null,
-                                          name: deviceNameTc.text,
-                                          descrition: descriptionTc.text,
-                                          swittch: false,
-                                          deviceId: deviceId,
-                                          deviceType: DeviceType.getDeviceType(
-                                              deviceId)!,
-                                          auto: false,
-                                          isSensor: false,
-                                          schedule: false,
-                                          roomId: rooms[selectedIndex].id,
-                                          scheduleStartTime: '',
-                                          scheduleEndTime: '',
-                                          trigerId: '',
-                                          trigerAction: '',
-                                          triggerDelay: 0,
-                                          triggerValue: 0,
-                                        ),
-                                        context,
-                                      );
+                                  if (widget.device != null) {
+                                    //updateing
+                                    if (trigger != null && !trigger.isNull()) {
+                                      ref
+                                          .read(addDeviceNotifierProvider
+                                              .notifier)
+                                          .updateDevice(
+                                            widget.device!.copyWith(
+                                              name: deviceNameTc.text,
+                                              descrition: descriptionTc.text,
+                                              deviceId: deviceId,
+                                              deviceType:
+                                                  DeviceType.getDeviceType(
+                                                      deviceId)!,
+                                              roomId: rooms[selectedIndex].id,
+                                              trigerId: trigger.id,
+                                              triggerName: trigger.name,
+                                              trigerAction: trigger.action,
+                                              triggerDelay:
+                                                  trigger.delay.toInt(),
+                                              triggerValue:
+                                                  trigger.value.toInt(),
+                                            ),
+                                            context,
+                                          );
+                                    } else {
+                                      ref
+                                          .read(addDeviceNotifierProvider
+                                              .notifier)
+                                          .updateDevice(
+                                            widget.device!.copyWith(
+                                              name: deviceNameTc.text,
+                                              descrition: descriptionTc.text,
+                                              deviceId: deviceId,
+                                              deviceType:
+                                                  DeviceType.getDeviceType(
+                                                      deviceId)!,
+                                              roomId: rooms[selectedIndex].id,
+                                              trigerId: '',
+                                              triggerName: '',
+                                              trigerAction: '',
+                                              triggerDelay: 0,
+                                              triggerValue: 0,
+                                            ),
+                                            context,
+                                          );
+                                    }
+                                  } else {
+                                    //adding
+
+                                    if (trigger != null && !trigger.isNull()) {
+                                      ref
+                                          .read(addDeviceNotifierProvider
+                                              .notifier)
+                                          .addDevice(
+                                            Device(
+                                              id: null,
+                                              name: deviceNameTc.text,
+                                              descrition: descriptionTc.text,
+                                              swittch: false,
+                                              isSensor: false,
+                                              deviceId: deviceId,
+                                              deviceType:
+                                                  DeviceType.getDeviceType(
+                                                      deviceId)!,
+                                              auto: false,
+                                              schedule: false,
+                                              roomId: rooms[selectedIndex].id,
+                                              scheduleStartTime: '',
+                                              scheduleEndTime: '',
+                                              trigerId: trigger.id!,
+                                              triggerName: trigger.name!,
+                                              trigerAction: trigger.action!,
+                                              triggerDelay:
+                                                  trigger.delay.toInt(),
+                                              triggerValue:
+                                                  trigger.value.toInt(),
+                                            ),
+                                            context,
+                                          );
+                                    } else {
+                                      ref
+                                          .read(addDeviceNotifierProvider
+                                              .notifier)
+                                          .addDevice(
+                                            Device(
+                                              id: null,
+                                              name: deviceNameTc.text,
+                                              descrition: descriptionTc.text,
+                                              swittch: false,
+                                              deviceId: deviceId,
+                                              deviceType:
+                                                  DeviceType.getDeviceType(
+                                                      deviceId)!,
+                                              auto: false,
+                                              isSensor: false,
+                                              schedule: false,
+                                              roomId: rooms[selectedIndex].id,
+                                              scheduleStartTime: '',
+                                              scheduleEndTime: '',
+                                              trigerId: '',
+                                              triggerName: '',
+                                              trigerAction: '',
+                                              triggerDelay: 0,
+                                              triggerValue: 0,
+                                            ),
+                                            context,
+                                          );
+                                    }
                                 }
                               } else {
                                 toast("Device Id is null.", Colors.orange);
@@ -289,7 +400,8 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
                             }
                           },
                         );
-                }),
+                  },
+                ),
               ],
             ),
           ),

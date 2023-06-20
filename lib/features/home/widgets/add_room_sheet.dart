@@ -54,10 +54,11 @@ class _AddRoomSheetState extends ConsumerState<AddRoomSheet> {
                   if (v!.isEmpty) {
                     return "This field is required";
                   }
+                  return null;
                 },
               ),
               loading
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(
                         color: Pallete.primaryColor,
                       ),

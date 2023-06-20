@@ -7,8 +7,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sdl_v2/Models/device.dart';
 import 'package:sdl_v2/core/constants.dart';
 import 'package:sdl_v2/core/theme.dart';
-import 'package:sdl_v2/features/device%20device/widget/fake_slider.dart';
-import 'package:sdl_v2/features/device%20device/widget/time_view.dart';
+import 'package:sdl_v2/features/add%20device/add_device_page.dart';
+import 'package:sdl_v2/features/device%20detail/widget/fake_slider.dart';
+import 'package:sdl_v2/features/device%20detail/widget/time_view.dart';
 import 'package:sdl_v2/features/home/home_controller.dart';
 import 'package:sdl_v2/main_page.dart';
 
@@ -29,7 +30,12 @@ class DeviceDetailPage extends ConsumerStatefulWidget {
 class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
   @override
   Widget build(BuildContext context) {
-    final Device device = ref.watch(devicesProvider)[widget.index];
+    final Device device = ref
+        .watch(devicesProvider)
+        .where((e) =>
+            e.roomId ==
+            ref.read(roomsProvider)[ref.read(selectedRoomProvider)].id)
+        .toList()[widget.index];
     return Scaffold(
       backgroundColor: Pallete.primaryColor,
       appBar: AppBar(
@@ -43,7 +49,16 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => AddDevicePage(
+                    device: device,
+                  ),
+                ),
+              );
+            },
             icon: const Icon(
               Icons.settings_outlined,
               color: Colors.black45,
@@ -56,13 +71,14 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
       body: Stack(
         children: [
           Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 25,
-                ),
-                child: Image.asset(AssetConst.lightBulbImg),
-              )),
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 25,
+              ),
+              child: Image.asset(AssetConst.lightBulbImg),
+            ),
+          ),
           SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.only(top: 280),
@@ -85,10 +101,11 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
                         Text(
                           widget.roomName,
                           style: const TextStyle(
-                              fontSize: 23,
-                              fontWeight: FontWeight.w300,
-                              color: Pallete.cardColor,
-                              fontStyle: FontStyle.italic),
+                            fontSize: 23,
+                            fontWeight: FontWeight.w300,
+                            color: Pallete.cardColor,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                         const SizedBox(
                           height: 40,
@@ -103,12 +120,12 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
                       horizontal: 40,
                       vertical: 10,
                     ),
-                    decoration: const BoxDecoration(
-                      color: Pallete.bgColor,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(50),
-                      ),
-                    ),
+                    decoration: BoxDecoration(
+                        color: Pallete.bgColor,
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(50),
+                        ),
+                        boxShadow: shadow),
                     child: Column(
                       children: [
                         Row(
@@ -226,28 +243,32 @@ class _DeviceDetailPageState extends ConsumerState<DeviceDetailPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             TimeView(
-                              onTap: () {
-                                
-                              },
-                              time: "12:00",
-                              amPm: "pm",
+                              isStart: true,
+                              time: device.scheduleStartTime.isEmpty
+                                  ? null
+                                  : DateTime.parse(device.scheduleStartTime),
+                              isAvailable: device.schedule,
+                              id: device.id!,
                             ),
-                            SizedBox(
-                              width: 10,
+                            const SizedBox(
+                              width: 15,
                             ),
-                            Text(
+                            const Text(
                               "_____",
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w900,
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
+                            const SizedBox(
+                              width: 15,
                             ),
                             TimeView(
-                              onTap: (){},
-                              time: "12:00",
-                              amPm: "pm",
+                              id: device.id!,
+                              isStart: false,
+                              time: device.scheduleEndTime.isEmpty
+                                  ? null
+                                  : DateTime.parse(device.scheduleEndTime),
+                              isAvailable: device.schedule,
                             ),
                           ],
                         )

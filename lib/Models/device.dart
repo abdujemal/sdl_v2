@@ -5,23 +5,29 @@ class Device {
   final String? id;
   final String name;
   final String descrition;
+  final double? value1;
+  final double? value2;
   final bool swittch;
   final String deviceId;
   final String deviceType;
   final bool auto;
   final bool schedule;
   final bool isSensor;
-  final String roomId;
+  final String roomId; 
   final String scheduleStartTime;
   final String scheduleEndTime;
   final String trigerId;
+  final String triggerName;
   final String trigerAction;
   final int triggerDelay; // min: 1  and max: 60
   final int triggerValue;
+  
   Device({
     this.id,
     required this.name,
     required this.descrition,
+    this.value1,
+    this.value2,
     required this.swittch,
     required this.deviceId,
     required this.deviceType,
@@ -32,16 +38,26 @@ class Device {
     required this.scheduleStartTime,
     required this.scheduleEndTime,
     required this.trigerId,
+    required this.triggerName,
     required this.trigerAction,
     required this.triggerDelay,
     required this.triggerValue,
   });
   
 
+  
+  String toJson() => json.encode(toMap());
+
+  factory Device.fromJson(String source) => Device.fromMap(json.decode(source));
+
+  
+
   Device copyWith({
     String? id,
     String? name,
     String? descrition,
+    double? value1,
+    double? value2,
     bool? swittch,
     String? deviceId,
     String? deviceType,
@@ -52,6 +68,7 @@ class Device {
     String? scheduleStartTime,
     String? scheduleEndTime,
     String? trigerId,
+    String? triggerName,
     String? trigerAction,
     int? triggerDelay,
     int? triggerValue,
@@ -60,6 +77,8 @@ class Device {
       id: id ?? this.id,
       name: name ?? this.name,
       descrition: descrition ?? this.descrition,
+      value1: value1 ?? this.value1,
+      value2: value2 ?? this.value2,
       swittch: swittch ?? this.swittch,
       deviceId: deviceId ?? this.deviceId,
       deviceType: deviceType ?? this.deviceType,
@@ -70,6 +89,7 @@ class Device {
       scheduleStartTime: scheduleStartTime ?? this.scheduleStartTime,
       scheduleEndTime: scheduleEndTime ?? this.scheduleEndTime,
       trigerId: trigerId ?? this.trigerId,
+      triggerName: triggerName ?? this.triggerName,
       trigerAction: trigerAction ?? this.trigerAction,
       triggerDelay: triggerDelay ?? this.triggerDelay,
       triggerValue: triggerValue ?? this.triggerValue,
@@ -77,10 +97,12 @@ class Device {
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'id': id,
       'name': name,
       'descrition': descrition,
+      'value1': value1,
+      'value2': value2,
       'swittch': swittch,
       'deviceId': deviceId,
       'deviceType': deviceType,
@@ -91,6 +113,7 @@ class Device {
       'scheduleStartTime': scheduleStartTime,
       'scheduleEndTime': scheduleEndTime,
       'trigerId': trigerId,
+      'triggerName': triggerName,
       'trigerAction': trigerAction,
       'triggerDelay': triggerDelay,
       'triggerValue': triggerValue,
@@ -99,28 +122,81 @@ class Device {
 
   factory Device.fromMap(Map<dynamic, dynamic> map) {
     return Device(
-      id: map['id'] != null ? map['id'] as String : null,
-      name: map['name'] as String,
-      descrition: map['descrition'] as String,
-      swittch: map['swittch'] as bool,
-      deviceId: map['deviceId'] as String,
-      deviceType: map['deviceType'] as String,
-      auto: map['auto'] as bool,
-      schedule: map['schedule'] as bool,
-      isSensor: map['isSensor'] as bool,
-      roomId: map['roomId'] as String,
-      scheduleStartTime: map['scheduleStartTime'] as String,
-      scheduleEndTime: map['scheduleEndTime'] as String,
-      trigerId: map['trigerId'] as String,
-      trigerAction: map['trigerAction'] as String,
-      triggerDelay: map['triggerDelay'] as int,
-      triggerValue: map['triggerValue'] as int,
+      id: map['id'],
+      name: map['name'] ?? '',
+      descrition: map['descrition'] ?? '',
+      value1: map['value1']?.toDouble(),
+      value2: map['value2']?.toDouble(),
+      swittch: map['swittch'] ?? false,
+      deviceId: map['deviceId'] ?? '',
+      deviceType: map['deviceType'] ?? '',
+      auto: map['auto'] ?? false,
+      schedule: map['schedule'] ?? false,
+      isSensor: map['isSensor'] ?? false,
+      roomId: map['roomId'] ?? '',
+      scheduleStartTime: map['scheduleStartTime'] ?? '',
+      scheduleEndTime: map['scheduleEndTime'] ?? '',
+      trigerId: map['trigerId'] ?? '',
+      triggerName: map['triggerName'] ?? '',
+      trigerAction: map['trigerAction'] ?? '',
+      triggerDelay: map['triggerDelay']?.toInt() ?? 0,
+      triggerValue: map['triggerValue']?.toInt() ?? 0,
     );
   }
 
-  String toJson() => json.encode(toMap());
+  @override
+  String toString() {
+    return 'Device(id: $id, name: $name, descrition: $descrition, value1: $value1, value2: $value2, swittch: $swittch, deviceId: $deviceId, deviceType: $deviceType, auto: $auto, schedule: $schedule, isSensor: $isSensor, roomId: $roomId, scheduleStartTime: $scheduleStartTime, scheduleEndTime: $scheduleEndTime, trigerId: $trigerId, triggerName: $triggerName, trigerAction: $trigerAction, triggerDelay: $triggerDelay, triggerValue: $triggerValue)';
+  }
 
-  factory Device.fromJson(String source) => Device.fromMap(json.decode(source) as Map<String, dynamic>);
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+  
+    return other is Device &&
+      other.id == id &&
+      other.name == name &&
+      other.descrition == descrition &&
+      other.value1 == value1 &&
+      other.value2 == value2 &&
+      other.swittch == swittch &&
+      other.deviceId == deviceId &&
+      other.deviceType == deviceType &&
+      other.auto == auto &&
+      other.schedule == schedule &&
+      other.isSensor == isSensor &&
+      other.roomId == roomId &&
+      other.scheduleStartTime == scheduleStartTime &&
+      other.scheduleEndTime == scheduleEndTime &&
+      other.trigerId == trigerId &&
+      other.triggerName == triggerName &&
+      other.trigerAction == trigerAction &&
+      other.triggerDelay == triggerDelay &&
+      other.triggerValue == triggerValue;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+      name.hashCode ^
+      descrition.hashCode ^
+      value1.hashCode ^
+      value2.hashCode ^
+      swittch.hashCode ^
+      deviceId.hashCode ^
+      deviceType.hashCode ^
+      auto.hashCode ^
+      schedule.hashCode ^
+      isSensor.hashCode ^
+      roomId.hashCode ^
+      scheduleStartTime.hashCode ^
+      scheduleEndTime.hashCode ^
+      trigerId.hashCode ^
+      triggerName.hashCode ^
+      trigerAction.hashCode ^
+      triggerDelay.hashCode ^
+      triggerValue.hashCode;
+  }
 }
 
 class DeviceType {

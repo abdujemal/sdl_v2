@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:sdl_v2/Models/device.dart';
+import 'package:sdl_v2/core/common/delete_dialog.dart';
 import 'package:sdl_v2/core/constants.dart';
 import 'package:sdl_v2/core/theme.dart';
-import 'package:sdl_v2/features/device%20device/device_detail_page.dart';
+import 'package:sdl_v2/features/add%20device/add_device_controller.dart';
+import 'package:sdl_v2/features/device%20detail/device_detail_page.dart';
 import 'package:sdl_v2/features/home/home_controller.dart';
 
 class DeviceCard extends ConsumerWidget {
@@ -24,6 +26,20 @@ class DeviceCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
+      onLongPress: () {
+        showDialog(
+          context: context,
+          builder: (_) => DeleteDialog(
+            action: () {
+              ref.read(addDeviceNotifierProvider.notifier).deleteDevice(
+                    device.id!,
+                    context,
+                  );
+            },
+            title: device.name,
+          ),
+        );
+      },
       onTap: () {
         Navigator.push(
           context,

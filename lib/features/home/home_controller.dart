@@ -11,6 +11,8 @@ final homeNotifierProvider = StateNotifierProvider<HomeNotifier, bool>((ref) {
   return HomeNotifier(ref: ref, homeRepo: ref.read(homeRepoProvider));
 });
 
+final deleteLoadingProvider = StateProvider<bool>((ref) => false);
+
 class HomeNotifier extends StateNotifier<bool> {
   final Ref ref;
   final HomeRepo homeRepo;
@@ -31,6 +33,22 @@ class HomeNotifier extends StateNotifier<bool> {
     }, (r) {
       ref.read(homeLoadingProvider.notifier).update((state) => false);
       toast("Room is added", Colors.green);
+      Navigator.pop(context);
+    });
+  }
+
+  deleteRoom(String id, BuildContext context) async {
+    ref.read(deleteLoadingProvider.notifier).update((state) => true);
+
+    final res = await homeRepo.deleteRoom(id);
+
+    res.fold((l) {
+      ref.read(deleteLoadingProvider.notifier).update((state) => false);
+      toast(l.messege, Colors.red);
+      Navigator.pop(context);
+    }, (r) {
+      ref.read(deleteLoadingProvider.notifier).update((state) => false);
+      toast("Room is deleted", Colors.green);
       Navigator.pop(context);
     });
   }

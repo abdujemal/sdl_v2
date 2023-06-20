@@ -10,7 +10,7 @@ class FakeSlider extends ConsumerWidget {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 20),
-      height: 70,
+      height: 50,
       decoration: BoxDecoration(
           color: Pallete.inputBg, borderRadius: BorderRadius.circular(60)),
       child: Column(
@@ -18,7 +18,7 @@ class FakeSlider extends ConsumerWidget {
         children: [
           Container(
             width: 150,
-            height: 70,
+            height: 50,
             decoration: const BoxDecoration(
               color: Pallete.primaryColor,
               borderRadius: BorderRadius.horizontal(

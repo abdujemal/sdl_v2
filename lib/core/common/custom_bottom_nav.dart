@@ -26,7 +26,7 @@ class _CustomBottomNavState extends ConsumerState<CustomBottomNav> {
     final currentIndexNotifier = ref.read(currentTabProvider.notifier);
 
     return Container(
-      color: Colors.white,
+      color: Pallete.bgColor,
       height: 70,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

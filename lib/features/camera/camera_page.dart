@@ -13,7 +13,7 @@ class _CameraPageState extends ConsumerState<CameraPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(children: [
+      child: const Column(children: [
         Text("Camera ")
       ]),
     );

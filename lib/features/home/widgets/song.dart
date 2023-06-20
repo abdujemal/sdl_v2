@@ -10,13 +10,17 @@ class Song extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      
+              
       decoration: BoxDecoration(
         color: Pallete.cardColor,
         borderRadius: BorderRadius.circular(15),
         boxShadow: shadow,
       ),
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(
+        vertical: 12,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -25,17 +29,17 @@ class Song extends StatelessWidget {
             color: Colors.pink,
             height: 40,
           ),
-          Column(
+          const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 "This is a song",
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 8.0),
                 child: Text("by you"),
               ),
