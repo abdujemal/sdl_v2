@@ -21,8 +21,8 @@ final doorLockProvider = StateProvider<DoorLock?>((ref) {
   return null;
 });
 
-final usersPrivider = StateProvider<User?>((ref) {
-  return null;
+final usersPrivider = StateProvider<List<User>>((ref) {
+  return [];
 });
 
 class DoorLockPage extends ConsumerStatefulWidget {
@@ -54,7 +54,13 @@ class _DoorLockPageState extends ConsumerState<DoorLockPage> {
     usersStream =
         FirebaseDatabase.instance.ref().child("Users").onValue.listen((event) {
       if (event.snapshot.exists) {
-        print(event.snapshot.value);
+        List<User> users = [];
+        for (var data in event.snapshot.value as List) {
+          users.add(User.fromMap(data as Map));
+        }
+        ref.read(usersPrivider.notifier).update(
+              (state) => users,
+            );
       }
     });
 

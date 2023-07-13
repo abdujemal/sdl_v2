@@ -14,6 +14,8 @@ class _ActivitiesTabState extends ConsumerState<ActivitiesTab> {
   @override
   Widget build(BuildContext context) {
     final doorLock = ref.watch(doorLockProvider);
+    final users = ref.watch(usersPrivider);
+    print(users.length);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -30,6 +32,7 @@ class _ActivitiesTabState extends ConsumerState<ActivitiesTab> {
               itemBuilder: (context, index) {
                 return ActivityItem(
                   activity: doorLock.activities[index],
+                  users: users,
                 );
               },
             ),

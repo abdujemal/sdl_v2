@@ -36,7 +36,7 @@ class User {
     };
   }
 
-  factory User.fromMap(Map<String, dynamic> map) {
+  factory User.fromMap(Map<dynamic, dynamic> map) {
     return User(
       name: map['name'] ?? '',
       id: map['id']?.toInt() ?? 0,

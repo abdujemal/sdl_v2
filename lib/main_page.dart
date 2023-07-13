@@ -105,6 +105,7 @@ class _MainPageState extends ConsumerState<MainPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        title: Text(index == 2 ? "Smar Door" : ""),
         leading: IconButton(
           icon: SvgPicture.asset(
             AssetConst.menuIcon,
