@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:sdl_v2/core/constants.dart';
-import 'package:sdl_v2/features/doorLock/door_loack_page.dart';
+import 'package:sdl_v2/features/doorLock/pages/door_lock_page.dart';
 
 import '../../../core/theme.dart';
 

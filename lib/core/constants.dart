@@ -22,6 +22,11 @@ class AssetConst {
   static const String prevIcon = '$path/prev icon.svg';
   static const String rfid = '$path/rfid icon.svg';
   static const String userIcon = '$path/user icon.svg';
+  static const String fingerErrorIcon = '$path/finger error icon.svg';
+  static const String fingerRight = '$path/finger right.svg';
+  static const String finger = '$path/finger.svg';
+  static const String lockIcon = '$path/lockicon.svg';
+  static const String unlockIcon = '$path/unlock icon.svg';
 }
 
 final List<BoxShadow> shadow = [

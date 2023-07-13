@@ -6,18 +6,18 @@ import 'package:sdl_v2/Models/activity.dart';
 
 class DoorLock {
   final String deviceId;
-  final int enroll; 
-  //0: is static, 
-  //1: is start inrolling: put your finger, 
+  final int enroll;
+  //0: is static,
+  //1: is start inrolling: put your finger,
   //2: is processing: pick your finger,
   //3: is processing: put your finger again,
-  //4: is success 
+  //4: is success
   //5: is error;
   final String errorMsg;
   final int enrollId;
   final int open; // 0 or 1
   final List<Activity> activities;
-  final List<String> code;
+  // final List<String> code;
   DoorLock({
     required this.deviceId,
     required this.enroll,
@@ -25,9 +25,8 @@ class DoorLock {
     required this.enrollId,
     required this.open,
     required this.activities,
-    required this.code,
+    // required this.code,
   });
-
 
   DoorLock copyWith({
     String? deviceId,
@@ -36,7 +35,7 @@ class DoorLock {
     int? enrollId,
     int? open,
     List<Activity>? activities,
-    List<String>? code,
+    // List<String>? code,
   }) {
     return DoorLock(
       deviceId: deviceId ?? this.deviceId,
@@ -45,7 +44,7 @@ class DoorLock {
       enrollId: enrollId ?? this.enrollId,
       open: open ?? this.open,
       activities: activities ?? this.activities,
-      code: code ?? this.code,
+      // code: code ?? this.code,
     );
   }
 
@@ -56,54 +55,58 @@ class DoorLock {
       'errorMsg': errorMsg,
       'enrollId': enrollId,
       'open': open,
-      'activities': activities.map((x) => x.toMap()).toList(),
-      'code': code,
+      'Activity': activities.map((x) => x.toMap()).toList(),
+      // 'code': code,
     };
   }
 
-  factory DoorLock.fromMap(Map<String, dynamic> map) {
+  factory DoorLock.fromMap(Map<dynamic, dynamic> map) {
+    final activities = map['Activity'] as List;
     return DoorLock(
       deviceId: map['deviceId'] ?? '',
       enroll: map['enroll']?.toInt() ?? 0,
       errorMsg: map['errorMsg'] ?? '',
       enrollId: map['enrollId']?.toInt() ?? 0,
       open: map['open']?.toInt() ?? 0,
-      activities: List<Activity>.from(map['activities']?.map((x) => Activity.fromMap(x))),
-      code: List<String>.from(map['code']),
+      activities: activities
+          .map((e) => Activity.fromMap(e))
+          .toList(), //List<Activity>.from(map['Activity'].map((x) => print(x))),
+      // code: List<String>.from(map['code']),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory DoorLock.fromJson(String source) => DoorLock.fromMap(json.decode(source));
+  factory DoorLock.fromJson(String source) =>
+      DoorLock.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'DoorLock(deviceId: $deviceId, enroll: $enroll, errorMsg: $errorMsg, enrollId: $enrollId, open: $open, activities: $activities, code: $code)';
+    return 'DoorLock(deviceId: $deviceId, enroll: $enroll, errorMsg: $errorMsg, enrollId: $enrollId, open: $open, activities: $activities)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is DoorLock &&
-      other.deviceId == deviceId &&
-      other.enroll == enroll &&
-      other.errorMsg == errorMsg &&
-      other.enrollId == enrollId &&
-      other.open == open &&
-      listEquals(other.activities, activities) &&
-      listEquals(other.code, code);
+        other.deviceId == deviceId &&
+        other.enroll == enroll &&
+        other.errorMsg == errorMsg &&
+        other.enrollId == enrollId &&
+        other.open == open &&
+        listEquals(other.activities, activities);
+    // listEquals(other.code, code);
   }
 
   @override
   int get hashCode {
     return deviceId.hashCode ^
-      enroll.hashCode ^
-      errorMsg.hashCode ^
-      enrollId.hashCode ^
-      open.hashCode ^
-      activities.hashCode ^
-      code.hashCode;
+        enroll.hashCode ^
+        errorMsg.hashCode ^
+        enrollId.hashCode ^
+        open.hashCode ^
+        activities.hashCode;
+    // code.hashCode;
   }
 }

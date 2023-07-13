@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class Activity {
-  final int id;
+  final String id;
   final String time; // the key of the map
   final int type;
   Activity({
@@ -11,7 +11,7 @@ class Activity {
   });
 
   Activity copyWith({
-    int? id,
+    String? id,
     String? time,
     int? type,
   }) {
@@ -30,9 +30,20 @@ class Activity {
     };
   }
 
-  factory Activity.fromMap(Map<String, dynamic> map) {
+  String getType() {
+    switch (type) {
+      case 1:
+        return "Finger Print";
+      case 2:
+        return "Code";
+      default:
+        return "RFID";
+    }
+  }
+
+  factory Activity.fromMap(Map<dynamic, dynamic> map) {
     return Activity(
-      id: map['id']?.toInt() ?? 0,
+      id: map['id'] ?? "",
       time: map['time'] ?? '',
       type: map['type']?.toInt() ?? 0,
     );
@@ -40,7 +51,8 @@ class Activity {
 
   String toJson() => json.encode(toMap());
 
-  factory Activity.fromJson(String source) => Activity.fromMap(json.decode(source));
+  factory Activity.fromJson(String source) =>
+      Activity.fromMap(json.decode(source));
 
   @override
   String toString() => 'Activity(id: $id, time: $time, type: $type)';
@@ -48,11 +60,11 @@ class Activity {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is Activity &&
-      other.id == id &&
-      other.time == time &&
-      other.type == type;
+        other.id == id &&
+        other.time == time &&
+        other.type == type;
   }
 
   @override

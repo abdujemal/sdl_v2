@@ -8,13 +8,13 @@ import 'package:sdl_v2/core/constants.dart';
 import 'package:sdl_v2/core/theme.dart';
 import 'package:sdl_v2/features/add%20device/add_device_page.dart';
 import 'package:sdl_v2/features/add%20sensor/add_sensor_page.dart';
+import 'package:sdl_v2/features/doorLock/pages/door_lock_page.dart';
 import 'package:sdl_v2/features/home/home_controller.dart';
 import 'package:sdl_v2/features/home/widgets/add_room_sheet.dart';
 
 import 'Models/room.dart';
 import 'core/common/custom_bottom_nav.dart';
 import 'features/camera/camera_page.dart';
-import 'features/doorLock/door_loack_page.dart';
 import 'features/home/home_page.dart';
 
 final roomsProvider = StateProvider<List<Room>>((ref) {
@@ -76,7 +76,7 @@ class _MainPageState extends ConsumerState<MainPage> {
         final data = dbevent.snapshot.value as Map;
         List<Device> sensors = [];
         for (var e in data.values) {
-          if (e['isSensor'] as bool == true) {            
+          if (e['isSensor'] as bool == true) {
             sensors.add(Device.fromMap(e));
           }
         }
@@ -100,6 +100,7 @@ class _MainPageState extends ConsumerState<MainPage> {
   Widget build(BuildContext context) {
     final int selectedRoomIndex = ref.watch(selectedRoomProvider);
     final List<Room> rooms = ref.watch(roomsProvider);
+    final index = ref.watch(currentTabProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -153,79 +154,75 @@ class _MainPageState extends ConsumerState<MainPage> {
       bottomNavigationBar: const CustomBottomNav(),
       body: Column(
         children: [
-          SizedBox(
-            height: 50,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                ...List.generate(
-                  rooms.length,
-                  (index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                      ),
-                      child: InkWell(
-                        onLongPress: () {
-                          showDialog(
-                            context: context,
-                            builder: (_) => DeleteDialog(
-                              action: () {
-                                ref
-                                    .read(homeNotifierProvider.notifier)
-                                    .deleteRoom(
-                                      rooms[index].id,
-                                      context,
-                                    );
-                              },
-                              title: rooms[index].name,
+          if (index != 2)
+            SizedBox(
+              height: 50,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  ...List.generate(
+                    rooms.length,
+                    (index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                        ),
+                        child: InkWell(
+                          onLongPress: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => DeleteDialog(
+                                action: () {
+                                  ref
+                                      .read(homeNotifierProvider.notifier)
+                                      .deleteRoom(
+                                        rooms[index].id,
+                                        context,
+                                      );
+                                },
+                                title: rooms[index].name,
+                              ),
+                            );
+                          },
+                          onTap: () {
+                            ref
+                                .read(selectedRoomProvider.notifier)
+                                .update((state) => index);
+                          },
+                          child: Ink(
+                            height: 50,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 5,
                             ),
-                          );
-                        },
-                        onTap: () {
-                          ref
-                              .read(selectedRoomProvider.notifier)
-                              .update((state) => index);
-                        },
-                        child: Ink(
-                          height: 50,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 5,
-                          ),
-                          child: Center(
-                            child: Text(
-                              rooms[index].name,
-                              style: TextStyle(
-                                fontSize: 23,
-                                color: selectedRoomIndex == index
-                                    ? Pallete.primaryColor
-                                    : Colors.grey,
+                            child: Center(
+                              child: Text(
+                                rooms[index].name,
+                                style: TextStyle(
+                                  fontSize: 23,
+                                  color: selectedRoomIndex == index
+                                      ? Pallete.primaryColor
+                                      : Colors.grey,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => const AddRoomSheet(),
-                    );
-                  },
-                  icon: const Icon(Icons.add),
-                )
-              ],
+                      );
+                    },
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const AddRoomSheet(),
+                      );
+                    },
+                    icon: const Icon(Icons.add),
+                  )
+                ],
+              ),
             ),
-          ),
-          Consumer(
-            builder: (context, ref, child) {
-              final index = ref.watch(currentTabProvider);
-              return Expanded(child: tabs[index]);
-            },
-          )
+          Expanded(child: tabs[index]),
         ],
       ),
     );
