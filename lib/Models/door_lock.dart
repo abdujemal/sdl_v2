@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import 'package:sdl_v2/Models/activity.dart';
+import 'package:sdl_v2/core/constants.dart';
 
 class DoorLock {
   final String deviceId;
@@ -73,6 +74,40 @@ class DoorLock {
           .toList(), //List<Activity>.from(map['Activity'].map((x) => print(x))),
       // code: List<String>.from(map['code']),
     );
+  }
+
+  getEnrollMsg() {
+    switch (enroll) {
+      case 1:
+        return "Put your finger on the sensor";
+      case 2:
+        return "Remove your finger";
+      case 3:
+        return "Place the same finger again";
+      case 4:
+        return "Finger Print stored";
+      case 5:
+        return errorMsg;
+      default:
+        return "Unknown";
+    }
+  }
+
+  getEnrollAsset() {
+    switch (enroll) {
+      case 1:
+        return AssetConst.finger;
+      case 2:
+        return AssetConst.finger;
+      case 3:
+        return AssetConst.finger;
+      case 4:
+        return AssetConst.fingerRight;
+      case 5:
+        return AssetConst.fingerErrorIcon;
+      default:
+        return AssetConst.finger;
+    }
   }
 
   String toJson() => json.encode(toMap());

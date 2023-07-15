@@ -81,8 +81,8 @@ class _DoorLockPageState extends ConsumerState<DoorLockPage> {
   @override
   void dispose() {
     super.dispose();
-    doorLockStream!.cancel();
-    usersStream!.cancel();
+    // doorLockStream!.cancel();
+    // usersStream!.cancel();
   }
 
   @override

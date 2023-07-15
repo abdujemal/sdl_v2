@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:sdl_v2/Models/door_lock.dart';
+import 'package:sdl_v2/Models/user.dart';
 import 'package:sdl_v2/core/failure.dart';
 import 'package:sdl_v2/core/providers.dart';
 import 'package:sdl_v2/core/typedef.dart';
@@ -22,6 +23,19 @@ class DoorLockRepo {
           .child("DL1234")
           .update(doorLock.toMap());
 
+      return right("r");
+    } catch (e) {
+      return left(Failure(messege: e.toString()));
+    }
+  }
+
+  FutureVoid updateUser(User user) async {
+    try {
+      await firebaseDatabase
+          .ref()
+          .child("Users")
+          .child(user.id.toString())
+          .update(user.toMap());
       return right("r");
     } catch (e) {
       return left(Failure(messege: e.toString()));
