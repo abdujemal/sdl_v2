@@ -69,14 +69,14 @@ class _EditScheduleState extends State<EditSchedule> {
                     ref.read(addDeviceNotifierProvider.notifier).editSchedule(
                           widget.id,
                           "scheduleStartTime",
-                          "${_dateTime.hour}:${_dateTime.minute}:00",
+                          _dateTime.toString(),
                           context,
                         );
                   } else {
                     ref.read(addDeviceNotifierProvider.notifier).editSchedule(
                           widget.id,
                           "scheduleEndTime",
-                          "${_dateTime.hour}:${_dateTime.minute}:00",
+                          _dateTime.toString(),
                           context,
                         );
                   }

@@ -153,7 +153,9 @@ class _QrScreenState extends ConsumerState<QrScreen> {
       setState(() {
         result = scanData;
         if (result != null) {
-          ref.read(qrDataProvider.notifier).update((state) => result!.code);
+          ref
+              .read(qrDataProvider.notifier)
+              .update((state) => result!.code!.split(";")[0].split(':')[2]);
           Navigator.pop(context);
         }
       });

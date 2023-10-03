@@ -40,17 +40,14 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
 
     deviceKey = GlobalKey<FormState>();
 
-
-      // Future.delayed(const Duration(seconds: 3)).then((value) {
-      //   ref.read(qrDataProvider.notifier).update((state) => "SS2354");
-      // });
+    // Future.delayed(const Duration(seconds: 3)).then((value) {
+    //   ref.read(qrDataProvider.notifier).update((state) => "SS2354");
+    // });
     if (widget.device != null) {
       deviceNameTc.text = widget.device!.name;
       descriptionTc.text = widget.device!.descrition;
       Future.delayed(const Duration(seconds: 1)).then((value) {
-        ref
-            .read(qrDataProvider.notifier)
-            .update((state) => widget.device!.deviceId);
+        ref.read(qrDataProvider.notifier).update((state) => widget.device!.id);
 
         if (widget.device!.trigerId != '') {
           ref.read(trigerProvider.notifier).update(
@@ -59,7 +56,7 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
                   id: widget.device!.id,
                   name: widget.device!.triggerName,
                   delay: widget.device!.triggerDelay.toDouble(),
-                  deviceId: widget.device!.deviceId,
+                  deviceId: widget.device!.id,
                   value: widget.device!.triggerValue.toDouble(),
                 ),
               );
@@ -265,25 +262,26 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
                 const SizedBox(
                   height: 25,
                 ),
-                Consumer(builder: (context, ref, child) {
-                  final isLoading = ref.watch(deviceLoadingProvider);
-                  return isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: Pallete.primaryColor,
-                          ),
-                        )
-                      : CustomBtn(
-                          text: "Done",
-                          margin: 20,
-                          onTap: () {
-                            String? deviceId = ref.read(qrDataProvider);
-                            final List<Room> rooms = ref.watch(roomsProvider);
-                            final int selectedIndex =
-                                ref.watch(selectedRoomProvider);
-                            final Trigger? trigger = ref.read(trigerProvider);
-                            if (deviceKey.currentState!.validate()) {
-                              if (deviceId != null) {
+                Consumer(
+                  builder: (context, ref, child) {
+                    final isLoading = ref.watch(deviceLoadingProvider);
+                    return isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Pallete.primaryColor,
+                            ),
+                          )
+                        : CustomBtn(
+                            text: "Done",
+                            margin: 20,
+                            onTap: () {
+                              String? deviceId = ref.read(qrDataProvider);
+                              final List<Room> rooms = ref.watch(roomsProvider);
+                              final int selectedIndex =
+                                  ref.watch(selectedRoomProvider);
+                              final Trigger? trigger = ref.read(trigerProvider);
+                              if (deviceKey.currentState!.validate()) {
+                                if (deviceId != null) {
                                   if (widget.device != null) {
                                     //updateing
                                     if (trigger != null && !trigger.isNull()) {
@@ -294,7 +292,6 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
                                             widget.device!.copyWith(
                                               name: deviceNameTc.text,
                                               descrition: descriptionTc.text,
-                                              deviceId: deviceId,
                                               deviceType:
                                                   DeviceType.getDeviceType(
                                                       deviceId)!,
@@ -317,7 +314,6 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
                                             widget.device!.copyWith(
                                               name: deviceNameTc.text,
                                               descrition: descriptionTc.text,
-                                              deviceId: deviceId,
                                               deviceType:
                                                   DeviceType.getDeviceType(
                                                       deviceId)!,
@@ -340,12 +336,11 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
                                               .notifier)
                                           .addDevice(
                                             Device(
-                                              id: null,
+                                              id: deviceId,
                                               name: deviceNameTc.text,
                                               descrition: descriptionTc.text,
                                               swittch: false,
                                               isSensor: false,
-                                              deviceId: deviceId,
                                               deviceType:
                                                   DeviceType.getDeviceType(
                                                       deviceId)!,
@@ -370,11 +365,10 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
                                               .notifier)
                                           .addDevice(
                                             Device(
-                                              id: null,
+                                              id: deviceId,
                                               name: deviceNameTc.text,
                                               descrition: descriptionTc.text,
                                               swittch: false,
-                                              deviceId: deviceId,
                                               deviceType:
                                                   DeviceType.getDeviceType(
                                                       deviceId)!,
@@ -393,13 +387,13 @@ class _AddDevicePageState extends ConsumerState<AddDevicePage> {
                                             context,
                                           );
                                     }
+                                  }
+                                } else {
+                                  toast("Device Id is null.", Colors.orange);
                                 }
-                              } else {
-                                toast("Device Id is null.", Colors.orange);
                               }
-                            }
-                          },
-                        );
+                            },
+                          );
                   },
                 ),
               ],

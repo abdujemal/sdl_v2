@@ -55,8 +55,8 @@ class AddDeviceRepo {
 
   FutureVoid addDevice(Device device) async {
     try {
-      final ref = firebaseDatabase.ref().child("Devices").push();
-      await ref.update(device.copyWith(id: ref.key.toString()).toMap());
+      final ref = firebaseDatabase.ref().child("Devices").child(device.id);
+      await ref.update(device.toMap());
       return right("");
     } catch (e) {
       return left(Failure(messege: e.toString()));

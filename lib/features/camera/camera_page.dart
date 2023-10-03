@@ -38,6 +38,8 @@ class _CameraPageState extends ConsumerState<CameraPage> {
               margin: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                   color: Colors.white,
+                  image:
+                      const DecorationImage(image: AssetImage('assets/demo_cam.jpg')),
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: shadow),
             ),

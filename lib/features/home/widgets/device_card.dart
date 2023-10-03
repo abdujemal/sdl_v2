@@ -16,12 +16,12 @@ class DeviceCard extends ConsumerWidget {
   final Device device;
   final String roomName;
   final int index;
-  const DeviceCard({super.key, 
+  const DeviceCard({
+    super.key,
     required this.device,
     required this.roomName,
     required this.index,
   });
-  
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +32,7 @@ class DeviceCard extends ConsumerWidget {
           builder: (_) => DeleteDialog(
             action: () {
               ref.read(addDeviceNotifierProvider.notifier).deleteDevice(
-                    device.id!,
+                    device.id,
                     context,
                   );
             },
@@ -45,19 +45,19 @@ class DeviceCard extends ConsumerWidget {
           context,
           MaterialPageRoute(
             builder: (context) => DeviceDetailPage(
-              
               roomName: roomName,
               index: index,
             ),
           ),
         );
       },
-      child: Container(
+      child: AnimatedContainer(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           boxShadow: shadow,
           color: device.swittch ? Pallete.cardColor : Pallete.primaryColor,
         ),
+        duration: const Duration(microseconds: 1000),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child: Row(

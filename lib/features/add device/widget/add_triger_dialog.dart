@@ -94,16 +94,16 @@ class _AddTrigerDialogState extends ConsumerState<AddTrigerDialog> {
                         return state.copyWith(
                           name: sensor!.name,
                           id: sensor.id,
-                          deviceId: sensor.deviceId,
+                          deviceId: sensor.id,
                         );
                       } else {
                         return Trigger(
                           action: null,
-                          id: sensor!.id!,
+                          id: sensor!.id,
                           name: sensor.name,
                           delay: 1,
                           value: 1,
-                          deviceId: sensor.deviceId,
+                          deviceId: sensor.id,
                         );
                       }
                     },

@@ -62,7 +62,7 @@ class DoorLock {
   }
 
   factory DoorLock.fromMap(Map<dynamic, dynamic> map) {
-    final activities = map['Activity'] as List;
+    final activities = (map['Activity'] as List);
     return DoorLock(
       deviceId: map['deviceId'] ?? '',
       enroll: map['enroll']?.toInt() ?? 0,

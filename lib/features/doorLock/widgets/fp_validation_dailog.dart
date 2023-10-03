@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sdl_v2/core/constants.dart';
 import 'package:sdl_v2/core/theme.dart';
 import 'package:sdl_v2/features/doorLock/door_lock_controller.dart';
 

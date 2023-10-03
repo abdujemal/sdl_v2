@@ -199,11 +199,12 @@ class _AddSensorPageState extends ConsumerState<AddSensorPage> {
                                     .read(addSensorNotifierProvider.notifier)
                                     .addSensor(
                                       Device(
+                                        id: deviceId,
                                         name: deviceNameTc.text,
                                         descrition: descritionTc.text,
                                         swittch: false,
-                                        deviceId: deviceId,
-                                        deviceType: DeviceType.getDeviceType(deviceId)!,
+                                        deviceType:
+                                            DeviceType.getDeviceType(deviceId)!,
                                         auto: false,
                                         schedule: false,
                                         isSensor: true,
@@ -217,7 +218,7 @@ class _AddSensorPageState extends ConsumerState<AddSensorPage> {
                                         triggerValue: 0,
                                         value1: 0,
                                         value2: 0,
-                                      ),                                     
+                                      ),
                                       context,
                                     );
                               } else {

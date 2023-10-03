@@ -2,18 +2,18 @@
 import 'dart:convert';
 
 class Device {
-  final String? id;
+  final String id;
+  final String? deviceId;
   final String name;
   final String descrition;
   final double? value1;
   final double? value2;
   final bool swittch;
-  final String deviceId;
   final String deviceType;
   final bool auto;
   final bool schedule;
   final bool isSensor;
-  final String roomId; 
+  final String roomId;
   final String scheduleStartTime;
   final String scheduleEndTime;
   final String trigerId;
@@ -21,15 +21,15 @@ class Device {
   final String trigerAction;
   final int triggerDelay; // min: 1  and max: 60
   final int triggerValue;
-  
+
   Device({
-    this.id,
+    required this.id,
     required this.name,
     required this.descrition,
+    this.deviceId,
     this.value1,
     this.value2,
     required this.swittch,
-    required this.deviceId,
     required this.deviceType,
     required this.auto,
     required this.schedule,
@@ -43,23 +43,19 @@ class Device {
     required this.triggerDelay,
     required this.triggerValue,
   });
-  
 
-  
   String toJson() => json.encode(toMap());
 
   factory Device.fromJson(String source) => Device.fromMap(json.decode(source));
 
-  
-
   Device copyWith({
     String? id,
+    String? deviceId,
     String? name,
     String? descrition,
     double? value1,
     double? value2,
     bool? swittch,
-    String? deviceId,
     String? deviceType,
     bool? auto,
     bool? schedule,
@@ -76,11 +72,11 @@ class Device {
     return Device(
       id: id ?? this.id,
       name: name ?? this.name,
+      deviceId: deviceId ?? this.deviceId,
       descrition: descrition ?? this.descrition,
       value1: value1 ?? this.value1,
       value2: value2 ?? this.value2,
       swittch: swittch ?? this.swittch,
-      deviceId: deviceId ?? this.deviceId,
       deviceType: deviceType ?? this.deviceType,
       auto: auto ?? this.auto,
       schedule: schedule ?? this.schedule,
@@ -99,12 +95,12 @@ class Device {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'deviceId': deviceId,
       'name': name,
       'descrition': descrition,
       'value1': value1,
       'value2': value2,
       'swittch': swittch,
-      'deviceId': deviceId,
       'deviceType': deviceType,
       'auto': auto,
       'schedule': schedule,
@@ -123,12 +119,12 @@ class Device {
   factory Device.fromMap(Map<dynamic, dynamic> map) {
     return Device(
       id: map['id'],
+      deviceId: map['deviceId'],
       name: map['name'] ?? '',
       descrition: map['descrition'] ?? '',
       value1: map['value1']?.toDouble(),
       value2: map['value2']?.toDouble(),
       swittch: map['swittch'] ?? false,
-      deviceId: map['deviceId'] ?? '',
       deviceType: map['deviceType'] ?? '',
       auto: map['auto'] ?? false,
       schedule: map['schedule'] ?? false,
@@ -146,56 +142,54 @@ class Device {
 
   @override
   String toString() {
-    return 'Device(id: $id, name: $name, descrition: $descrition, value1: $value1, value2: $value2, swittch: $swittch, deviceId: $deviceId, deviceType: $deviceType, auto: $auto, schedule: $schedule, isSensor: $isSensor, roomId: $roomId, scheduleStartTime: $scheduleStartTime, scheduleEndTime: $scheduleEndTime, trigerId: $trigerId, triggerName: $triggerName, trigerAction: $trigerAction, triggerDelay: $triggerDelay, triggerValue: $triggerValue)';
+    return 'Device(id: $id, name: $name, descrition: $descrition, value1: $value1, value2: $value2, swittch: $swittch, deviceType: $deviceType, auto: $auto, schedule: $schedule, isSensor: $isSensor, roomId: $roomId, scheduleStartTime: $scheduleStartTime, scheduleEndTime: $scheduleEndTime, trigerId: $trigerId, triggerName: $triggerName, trigerAction: $trigerAction, triggerDelay: $triggerDelay, triggerValue: $triggerValue)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is Device &&
-      other.id == id &&
-      other.name == name &&
-      other.descrition == descrition &&
-      other.value1 == value1 &&
-      other.value2 == value2 &&
-      other.swittch == swittch &&
-      other.deviceId == deviceId &&
-      other.deviceType == deviceType &&
-      other.auto == auto &&
-      other.schedule == schedule &&
-      other.isSensor == isSensor &&
-      other.roomId == roomId &&
-      other.scheduleStartTime == scheduleStartTime &&
-      other.scheduleEndTime == scheduleEndTime &&
-      other.trigerId == trigerId &&
-      other.triggerName == triggerName &&
-      other.trigerAction == trigerAction &&
-      other.triggerDelay == triggerDelay &&
-      other.triggerValue == triggerValue;
+        other.id == id &&
+        other.name == name &&
+        other.descrition == descrition &&
+        other.value1 == value1 &&
+        other.value2 == value2 &&
+        other.swittch == swittch &&
+        other.deviceType == deviceType &&
+        other.auto == auto &&
+        other.schedule == schedule &&
+        other.isSensor == isSensor &&
+        other.roomId == roomId &&
+        other.scheduleStartTime == scheduleStartTime &&
+        other.scheduleEndTime == scheduleEndTime &&
+        other.trigerId == trigerId &&
+        other.triggerName == triggerName &&
+        other.trigerAction == trigerAction &&
+        other.triggerDelay == triggerDelay &&
+        other.triggerValue == triggerValue;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      name.hashCode ^
-      descrition.hashCode ^
-      value1.hashCode ^
-      value2.hashCode ^
-      swittch.hashCode ^
-      deviceId.hashCode ^
-      deviceType.hashCode ^
-      auto.hashCode ^
-      schedule.hashCode ^
-      isSensor.hashCode ^
-      roomId.hashCode ^
-      scheduleStartTime.hashCode ^
-      scheduleEndTime.hashCode ^
-      trigerId.hashCode ^
-      triggerName.hashCode ^
-      trigerAction.hashCode ^
-      triggerDelay.hashCode ^
-      triggerValue.hashCode;
+        name.hashCode ^
+        descrition.hashCode ^
+        value1.hashCode ^
+        value2.hashCode ^
+        swittch.hashCode ^
+        deviceType.hashCode ^
+        auto.hashCode ^
+        schedule.hashCode ^
+        isSensor.hashCode ^
+        roomId.hashCode ^
+        scheduleStartTime.hashCode ^
+        scheduleEndTime.hashCode ^
+        trigerId.hashCode ^
+        triggerName.hashCode ^
+        trigerAction.hashCode ^
+        triggerDelay.hashCode ^
+        triggerValue.hashCode;
   }
 }
 
